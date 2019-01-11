@@ -10,21 +10,19 @@
 ; который не изменяется при переходе между шагами, является мощным способом размышления о
 ; построении итеративных алгоритмов.)
 
-(define (even? n)
-   (= (remainder n 2) 0)
-   )
-(define (square x)
-  (* x x)
-  )
+(define (square x) (* x x))
 
-(define (expt-fast b n)
-  (cond ((= n 0) 1)
-        ((even? n) (square (expt-fast b (/ n 2))))
-        ( else (* b (expt-fast b (- n 1))))
-        )
-  )
+(define (fast-expt b n) 
+  (fast-expt-iter 1 b n))
 
-(expt 2 3)
-(expt-iter 2 3 1)
-(expt-fast 2 7)
-(expt-fast 2 320)
+(define (fast-expt-iter a b n) 
+  (if (= n 0) 
+      a 
+      (if (even? n) 
+          (fast-expt-iter a (square b) (/ n 2)) 
+          (fast-expt-iter (* a b) b (- n 1)))))
+
+(fast-expt 2 320)
+
+; Как и указано в условии упражнения, инвариантом будет a*b^n = const.
+; В начале процесса a полагаем равным 1 и как следствие результат будет равен b^n. Условием выхода из процесса является n=0, а стало быть a*b^n = a.
